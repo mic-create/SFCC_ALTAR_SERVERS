@@ -1,0 +1,83 @@
+/* SFCC Altar Servers Attendance System — frontend/css/dashboard.css */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-header {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0.5rem 0;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.stat-footer {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.tech-table th {
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.tech-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.badge-active, .badge-present {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--status-present);
+  border: 1px solid var(--status-present);
+}
+
+.badge-inactive, .badge-absent {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--status-absent);
+  border: 1px solid var(--status-absent);
+}

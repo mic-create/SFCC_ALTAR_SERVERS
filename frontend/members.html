@@ -1,0 +1,94 @@
+<!-- SFCC Altar Servers Attendance System — frontend/members.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members - SFCC Altar Servers</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <script src="js/components.js"></script>
+    <script>
+      document.write(Components.renderSidebar('members'));
+    </script>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <h2 class="page-title">Member Management</h2>
+        <div class="user-profile">
+          <div class="user-info">
+            <div id="user-display-name" class="user-name">Executive</div>
+            <div id="user-display-role" class="user-role">OFFICER</div>
+          </div>
+          <button onclick="Auth.logout()" class="btn-logout">Logout</button>
+        </div>
+      </header>
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img 
+          src="frontend/assets/images/sfcc-logo.png" 
+          alt="SFCC Logo" 
+          class="sidebar-logo"
+          onerror="this.style.display='none';"
+        >
+        <div class="sidebar-brand-text">
+          <span class="brand-title">SFCC</span>
+          <span class="brand-subtitle">Altar Servers AMS</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="members.html" class="nav-link">Members</a>
+        <a href="meetings.html" class="nav-link">Meetings</a>
+        <a href="attendance.html" class="nav-link">Attendance</a>
+        <a href="reports.html" class="nav-link">Reports</a>
+      </nav>
+    </aside>   
+
+      <div class="content-body">
+        <div class="tech-card" style="margin-bottom: 2rem;">
+          <h3>Import Members via CSV</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Upload a CSV file formatted with columns: <code>member_id, full_name, class_level, status</code></p>
+          
+          <form id="csv-upload-form" style="display:flex; gap:1rem; align-items:center;">
+            <input type="file" id="csv-file-input" accept=".csv" required style="color:#fff;">
+            <button type="submit" class="btn-primary">Upload & Preview</button>
+            <a href="http://localhost:5000/api/members/template" class="btn-logout" style="text-decoration:none;">Download CSV Template</a>
+          </form>
+        </div>
+
+        <div class="tech-card">
+          <h3>Altar Servers Directory</h3>
+          <div class="table-wrapper">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Member ID</th>
+                  <th>Full Name</th>
+                  <th>Class / Level</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="members-table-body">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/members.js"></script>
+</body>
+</html>

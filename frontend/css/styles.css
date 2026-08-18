@@ -1,0 +1,105 @@
+/* ==========================================================================
+   IMAGE ASSETS & FUTURISTIC BRANDING STYLES
+   ========================================================================== */
+
+/* Login Background & Overlays */
+.login-body {
+  background-color: #0a0d14;
+  background-image: url('../images/login-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(10, 13, 20, 0.75) 0%, rgba(5, 7, 10, 0.95) 100%);
+  z-index: 1;
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(16, 22, 34, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 212, 255, 0.1);
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Logos & Image Containment */
+.login-logo {
+  max-width: 120px;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto 1.5rem auto;
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+}
+
+.sidebar-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  margin-right: 12px;
+}
+
+/* Page Header Subtle Visual Branding */
+.dashboard-header,
+.page-banner {
+  position: relative;
+  background-color: rgba(16, 22, 34, 0.8);
+  background-image: linear-gradient(90deg, rgba(10, 13, 20, 0.9) 0%, rgba(10, 13, 20, 0.6) 100%), url('../images/sfcc-background.jpg');
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  padding: 1.5rem 2rem;
+}
+
+/* Empty State / Section Hero Visuals */
+.empty-state-image,
+.section-hero-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0.85;
+}
+
+/* Fallback handling */
+.fallback-logo {
+  filter: grayscale(20%) brightness(1.1);
+}
+
+/* Mobile Responsive Tweaks */
+@media (max-width: 768px) {
+  .login-card {
+    margin: 1rem;
+    padding: 1.75rem;
+  }
+  
+  .login-logo {
+    max-width: 90px;
+    max-height: 90px;
+  }
+  
+  .sidebar-logo {
+    width: 28px;
+    height: 28px;
+  }
+}

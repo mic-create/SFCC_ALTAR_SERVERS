@@ -1,0 +1,79 @@
+<!-- SFCC Altar Servers Attendance System — frontend/meetings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetings - SFCC Altar Servers</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <script src="js/components.js"></script>
+    <script>
+      document.write(Components.renderSidebar('meetings'));
+    </script>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <h2 class="page-title">General Meetings</h2>
+        <div class="user-profile">
+          <div class="user-info">
+            <div id="user-display-name" class="user-name">Executive</div>
+            <div id="user-display-role" class="user-role">OFFICER</div>
+          </div>
+          <button onclick="Auth.logout()" class="btn-logout">Logout</button>
+        </div>
+      </header>
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img 
+          src="frontend/assets/images/sfcc-logo.png" 
+          alt="SFCC Logo" 
+          class="sidebar-logo"
+          onerror="this.style.display='none';"
+        >
+        <div class="sidebar-brand-text">
+          <span class="brand-title">SFCC</span>
+          <span class="brand-subtitle">Altar Servers AMS</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="members.html" class="nav-link">Members</a>
+        <a href="meetings.html" class="nav-link">Meetings</a>
+        <a href="attendance.html" class="nav-link">Attendance</a>
+        <a href="reports.html" class="nav-link">Reports</a>
+      </nav>
+    </aside>   
+
+      <div class="content-body">
+        <div class="tech-card" style="margin-bottom: 2rem;">
+          <h3>Create New Meeting</h3>
+          <form id="create-meeting-form" style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem;">
+            <input type="text" id="meeting-title" class="form-input" placeholder="Meeting Title" required>
+            <input type="text" id="meeting-venue" class="form-input" placeholder="Venue" value="St. Francis Catholic Church, Idimu" required>
+            <input type="date" id="meeting-date" class="form-input" required>
+            <input type="time" id="meeting-time" class="form-input" required>
+            <button type="submit" class="btn-primary" style="grid-column: span 2;">Schedule Meeting</button>
+          </form>
+        </div>
+
+        <h3>Meeting Schedule & History</h3>
+        <div id="meetings-list" style="margin-top:1rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/meetings.js"></script>
+</body>
+</html>
