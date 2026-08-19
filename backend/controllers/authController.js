@@ -1,6 +1,6 @@
-/* backend/src/controllers/authController.js */
+/* backend/controllers/authController.js */
 const pool = require('../config/database');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
@@ -14,17 +14,12 @@ exports.login = async (req, res) => {
       });
     }
 
-    // 1. Normalize input email
     const normalizedEmail = email.trim().toLowerCase();
 
-    // 2. Query user with LOWER(email) comparison
     const result = await pool.query(
       'SELECT id, name, email, password_hash, role, is_active FROM users WHERE LOWER(email) = $1',
       [normalizedEmail]
     );
-
-    // Diagnostic log (SAFE: No secrets/hashes printed)
-    console.log(`[AUTH CHECK] Email: ${normalizedEmail} | Found: ${result.rows.length > 0}`);
 
     if (result.rows.length === 0) {
       return res.status(401).json({ 
@@ -35,20 +30,14 @@ exports.login = async (req, res) => {
 
     const user = result.rows[0];
 
-    // 3. Check account active status
     if (!user.is_active) {
-      console.log(`[AUTH CHECK] User ${normalizedEmail} is inactive.`);
       return res.status(403).json({ 
         success: false, 
         message: 'Account is deactivated. Please contact an administrator.' 
       });
     }
 
-    // 4. Secure Bcrypt comparison
     const isMatch = await bcrypt.compare(password, user.password_hash);
-    
-    // Diagnostic log (SAFE: Boolean result only)
-    console.log(`[AUTH CHECK] Bcrypt match: ${isMatch}`);
 
     if (!isMatch) {
       return res.status(401).json({ 
@@ -57,7 +46,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // 5. Generate JWT Token
     const payload = {
       id: user.id,
       email: user.email,
@@ -68,7 +56,6 @@ exports.login = async (req, res) => {
       expiresIn: '24h'
     });
 
-    // 6. Return success payload
     return res.status(200).json({
       success: true,
       token,
