@@ -55,17 +55,37 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Check for loginForm or login-form to prevent null errors
       const loginForm = document.getElementById('loginForm') || document.getElementById('login-form');
+      const errorMessage = document.getElementById('errorMessage') || document.getElementById('error-message');
       
       if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
           e.preventDefault();
+          
           const email = document.getElementById('email').value.trim();
           const password = document.getElementById('password').value;
-          
-          // Calls window.Auth.login defined in js/auth.js
-          window.Auth.login(email, password);
+          const submitBtn = loginForm.querySelector('button[type="submit"]');
+
+          console.log("[LOGIN HANDLER RUNNING]");
+          console.log("AUTH OBJECT:", window.Auth);
+          console.log("API BASE URL:", window.CONFIG?.API_BASE_URL);
+
+          try {
+            if (submitBtn) submitBtn.disabled = true;
+            if (errorMessage) errorMessage.textContent = '';
+
+            // MUST await the async login function
+            await window.Auth.login(email, password);
+          } catch (err) {
+            console.error("[LOGIN FAILED]", err);
+            if (errorMessage) {
+              errorMessage.textContent = err.message || 'Authentication failed. Please check your credentials.';
+            } else {
+              alert(err.message || 'Login failed');
+            }
+          } finally {
+            if (submitBtn) submitBtn.disabled = false;
+          }
         });
       }
     });

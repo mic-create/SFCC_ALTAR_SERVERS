@@ -2,43 +2,39 @@
 
 const Auth = {
   async login(email, password) {
-    const errorMessage = document.getElementById('errorMessage');
-    const submitBtn = document.getElementById('submitBtn');
+    console.log("[AUTH DEBUG] Starting login for:", email);
 
-    if (!email || !password) {
-      if (errorMessage) errorMessage.textContent = 'Please enter both email and password.';
-      return;
-    }
+    // Make API request to Render Express backend
+    const response = await window.API.post('/auth/login', { email, password });
 
-    try {
-      if (submitBtn) submitBtn.disabled = true;
-      if (errorMessage) errorMessage.textContent = '';
+    console.log("[AUTH DEBUG] Login API Response:", response);
 
-      // API.post automatically targets https://sfcc-altar-servers-1.onrender.com/api
-      const response = await window.API.post('/auth/login', { email, password });
+    // Extract token regardless of whether backend returns { token } or { data: { token } }
+    const token = response.token || response.data?.token;
+    const user = response.user || response.data?.user;
 
-      if (response.success && response.token) {
-        localStorage.setItem(window.CONFIG.STORAGE_TOKEN_KEY, response.token);
-        localStorage.setItem(window.CONFIG.STORAGE_USER_KEY, JSON.stringify(response.user));
-        window.location.href = 'dashboard.html';
-      } else {
-        throw new Error(response.message || 'Login failed.');
+    if (token) {
+      const tokenKey = window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token';
+      const userKey = window.CONFIG?.STORAGE_USER_KEY || 'sfcc_user_info';
+
+      localStorage.setItem(tokenKey, token);
+      if (user) {
+        localStorage.setItem(userKey, JSON.stringify(user));
       }
-    } catch (err) {
-      if (errorMessage) {
-        errorMessage.textContent = err.message || 'Authentication failed. Please check your credentials.';
-      }
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
+
+      console.log("[AUTH DEBUG] Redirecting to dashboard.html...");
+      window.location.href = 'dashboard.html';
+      return response;
+    } else {
+      throw new Error(response.message || 'Invalid server response: Missing JWT token');
     }
   },
 
   logout() {
-    localStorage.removeItem(window.CONFIG.STORAGE_TOKEN_KEY);
-    localStorage.removeItem(window.CONFIG.STORAGE_USER_KEY);
+    localStorage.removeItem(window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token');
+    localStorage.removeItem(window.CONFIG?.STORAGE_USER_KEY || 'sfcc_user_info');
     window.location.href = 'login.html';
   }
 };
 
-// EXPLICIT GLOBAL EXPORT — Binds Auth to the window object so inline scripts can access it
 window.Auth = Auth;

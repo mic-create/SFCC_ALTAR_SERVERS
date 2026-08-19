@@ -5,6 +5,8 @@ const API = {
     const baseUrl = window.CONFIG ? window.CONFIG.API_BASE_URL : 'https://sfcc-altar-servers-1.onrender.com/api';
     const token = localStorage.getItem(window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token');
     
+    console.log("[API DEBUG] Fetching:", `${baseUrl}${endpoint}`);
+
     const headers = {
       ...options.headers
     };
@@ -26,6 +28,8 @@ const API = {
       const response = await fetch(`${baseUrl}${endpoint}`, config);
       const data = await response.json();
 
+      console.log("[API DEBUG] Response Status:", response.status, data);
+
       if (response.status === 401 || response.status === 403) {
         if (!window.location.pathname.includes('login.html')) {
           localStorage.removeItem(window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token');
@@ -35,12 +39,12 @@ const API = {
       }
 
       if (!response.ok) {
-        throw new Error(data.message || 'API request failed');
+        throw new Error(data.message || data.error || 'API request failed');
       }
 
       return data;
     } catch (error) {
-      console.error('API Error:', error);
+      console.error('[API Error]:', error);
       throw error;
     }
   },
@@ -68,5 +72,4 @@ const API = {
   }
 };
 
-// Explicitly attach to window object
 window.API = API;
