@@ -3,7 +3,7 @@ const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -74,4 +74,28 @@ exports.login = async (req, res) => {
       message: 'Internal server error' 
     });
   }
+};
+
+// Ensure getMe / getCurrentUser is implemented and exported!
+const getMe = async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, name, email, role, is_active FROM users WHERE id = $1',
+      [req.user.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    return res.status(200).json({ success: true, user: result.rows[0] });
+  } catch (err) {
+    console.error('[GET ME ERROR]:', err);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+module.exports = {
+  login,
+  getMe
 };

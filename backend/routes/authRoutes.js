@@ -1,10 +1,11 @@
-/* SFCC Altar Servers Attendance System — backend/routes/authRoutes.js */
+/* backend/routes/authRoutes.js */
 const express = require('express');
 const router = express.Router();
-const { login, getMe } = require('../controllers/authController');
+const authController = require('../controllers/authController');
 const { authenticateToken } = require('../middleware/authMiddleware');
 
-router.post('/login', login);
-router.get('/me', authenticateToken, getMe);
+// Route line 8 check: Ensure both middleware and controller exist!
+router.post('/login', authController.login);
+router.get('/me', authenticateToken, authController.getMe); 
 
 module.exports = router;
