@@ -1,60 +1,46 @@
 /* SFCC Altar Servers Attendance System — frontend/js/auth.js */
-const Auth = {
-  init() {
-    const token = localStorage.getItem(CONFIG.STORAGE_TOKEN_KEY);
-    const isLoginPage = window.location.pathname.includes('login.html');
 
-    if (!token && !isLoginPage) {
-      window.location.href = 'login.html';
-      return;
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
 
-    if (token && isLoginPage) {
-      window.location.href = 'dashboard.html';
-      return;
-    }
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    this.renderUserInfo();
-  },
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const submitBtn = document.getElementById('submitBtn');
+      const errorMessage = document.getElementById('errorMessage');
 
-  async login(email, password) {
-    try {
-      const response = await API.request('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password })
-      });
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
 
-      if (response.success) {
-        localStorage.setItem(CONFIG.STORAGE_TOKEN_KEY, response.data.token);
-        localStorage.setItem(CONFIG.STORAGE_USER_KEY, JSON.stringify(response.data.user));
-        window.location.href = 'dashboard.html';
+      if (!email || !password) {
+        if (errorMessage) errorMessage.textContent = 'Please enter both email and password.';
+        return;
       }
-    } catch (error) {
-      Components.showToast(error.message, 'error');
-    }
-  },
 
-  logout() {
-    localStorage.removeItem(CONFIG.STORAGE_TOKEN_KEY);
-    localStorage.removeItem(CONFIG.STORAGE_USER_KEY);
-    window.location.href = 'login.html';
-  },
+      try {
+        if (submitBtn) submitBtn.disabled = true;
+        if (errorMessage) errorMessage.textContent = '';
 
-  getUser() {
-    const userStr = localStorage.getItem(CONFIG.STORAGE_USER_KEY);
-    return userStr ? JSON.parse(userStr) : null;
-  },
+        // Call Express backend endpoint: POST /api/auth/login
+        const response = await window.API.post('/auth/login', { email, password });
 
-  renderUserInfo() {
-    const user = this.getUser();
-    if (!user) return;
-
-    const userNameEl = document.getElementById('user-display-name');
-    const userRoleEl = document.getElementById('user-display-role');
-
-    if (userNameEl) userNameEl.textContent = user.name;
-    if (userRoleEl) userRoleEl.textContent = user.role;
+        if (response.success && response.token) {
+          localStorage.setItem(window.CONFIG.STORAGE_TOKEN_KEY, response.token);
+          localStorage.setItem(window.CONFIG.STORAGE_USER_KEY, JSON.stringify(response.user));
+          window.location.href = 'dashboard.html';
+        } else {
+          throw new Error(response.message || 'Login failed.');
+        }
+      } catch (err) {
+        if (errorMessage) {
+          errorMessage.textContent = err.message || 'Authentication failed. Please check your credentials.';
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
   }
-};
-
-document.addEventListener('DOMContentLoaded', () => Auth.init());
+});

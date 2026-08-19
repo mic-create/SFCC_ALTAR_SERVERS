@@ -1,14 +1,9 @@
 /* SFCC Altar Servers Attendance System — frontend/js/api.js */
 
-const CONFIG = {
-  API_BASE_URL: 'https://sfcc-altar-servers.onrender.com/api',
-  STORAGE_TOKEN_KEY: 'sfcc_auth_token',
-  STORAGE_USER_KEY: 'sfcc_user_info'
-};
-
 const API = {
   async request(endpoint, options = {}) {
-    const token = localStorage.getItem(CONFIG.STORAGE_TOKEN_KEY);
+    const baseUrl = window.CONFIG ? window.CONFIG.API_BASE_URL : 'https://sfcc-altar-servers-1.onrender.com/api';
+    const token = localStorage.getItem(window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token');
     
     const headers = {
       ...options.headers
@@ -28,13 +23,13 @@ const API = {
     };
 
     try {
-      const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, config);
+      const response = await fetch(`${baseUrl}${endpoint}`, config);
       const data = await response.json();
 
       if (response.status === 401 || response.status === 403) {
         if (!window.location.pathname.includes('login.html')) {
-          localStorage.removeItem(CONFIG.STORAGE_TOKEN_KEY);
-          localStorage.removeItem(CONFIG.STORAGE_USER_KEY);
+          localStorage.removeItem(window.CONFIG?.STORAGE_TOKEN_KEY || 'sfcc_auth_token');
+          localStorage.removeItem(window.CONFIG?.STORAGE_USER_KEY || 'sfcc_user_info');
           window.location.href = 'login.html';
         }
       }
@@ -50,7 +45,6 @@ const API = {
     }
   },
 
-  // Helper methods for quick invocation
   get(endpoint) {
     return this.request(endpoint, { method: 'GET' });
   },
@@ -73,3 +67,6 @@ const API = {
     return this.request(endpoint, { method: 'DELETE' });
   }
 };
+
+// Explicitly attach to window object
+window.API = API;
