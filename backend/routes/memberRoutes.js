@@ -7,7 +7,7 @@ const { authenticateToken, authorizeRoles } = require('../middleware/authMiddlew
 // Apply authentication to all member routes
 router.use(authenticateToken);
 
-router.get('/', authenticateToken, memberController.getAllMembers);
+router.get('/', getAllMembers);
 router.post('/', authorizeRoles('ADMIN', 'PRESIDENT', 'SECRETARY'), createMember);
 router.put('/:id', authorizeRoles('ADMIN', 'PRESIDENT', 'SECRETARY'), updateMember);
 router.delete('/:id', authorizeRoles('ADMIN', 'PRESIDENT'), deleteMember);
