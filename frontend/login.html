@@ -54,11 +54,20 @@
       }
     }
 
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      Auth.login(email, password);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for loginForm or login-form to prevent null errors
+      const loginForm = document.getElementById('loginForm') || document.getElementById('login-form');
+      
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          
+          // Calls window.Auth.login defined in js/auth.js
+          window.Auth.login(email, password);
+        });
+      }
     });
   </script>
 </body>
