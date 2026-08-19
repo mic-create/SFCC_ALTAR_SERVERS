@@ -1,7 +1,7 @@
 /* backend/routes/memberRoutes.js */
 const express = require('express');
 const router = express.Router();
-const { getAllMembers, createMember, updateMember, deleteMember } = require('../controllers/membersController');
+const { getAllMembers, createMember, updateMember, deleteMember } = require('../controllers/memberController');
 const { authenticateToken, authorizeRoles } = require('../middleware/authMiddleware');
 
 // Apply authentication to all member routes
